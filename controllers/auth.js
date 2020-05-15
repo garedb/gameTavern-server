@@ -6,7 +6,34 @@ let jwt = require('jsonwebtoken')
 // POST /auth/login (find and validate user; send token)
 router.post('/login', (req, res) => {
   console.log(req.body)
-  res.send('STUB POST /auth/login')
+  // Look up the user by their email
+  db.User.findOne({ email: req.body.email })
+  .then(user => {
+    // Check whether the user exists
+    if (!user) {
+      // If they don't have an account, send an error message
+      return res.status(404).send({ message: 'User was not found!' })
+    }
+
+    // They exist, but make sure they have a correct password
+    if (!user.validPassword(req.body.password)) {
+      // Incorrect password, send error back
+      return res.status(401).send({ message: 'Invalid credentials' })
+    }
+
+    // We have a good user - make them a new token, send it to them
+    let token = jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
+      expiresIn: 60 * 60 * 8 // 8 hours, in seconds
+    })
+
+    res.send({ token })
+
+  })
+  .catch(err => {
+    console.log('Error in POST /auth/login', err)
+    res.status(503).send({ message: 'Server-side or DB error' })
+  })
+
 })
 
 // POST to /auth/signup (create user; generate token)
@@ -48,15 +75,6 @@ router.post('/signup', (req, res) => {
   })
 })
 
-// NOTE: User should be logged in to access this route
-router.get('/profile', (req, res) => {
-  // The user is logged in, so req.user should have data!
-  // TODO: Anything you want here!
 
-  // NOTE: This is the user data from the time the token was issued
-  // WARNING: If you update the user info those changes will not be reflected here
-  // To avoid this, reissue a token when you update user data
-  res.send({ message: 'Secret message for logged in people ONLY!' })
-})
 
 module.exports = router
