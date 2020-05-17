@@ -1,3 +1,3 @@
-# MERN Auth Boilerplate (Server-side)
+# Game Tavern (Server-side)
 
-Master branch contains starter code
+
