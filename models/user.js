@@ -2,6 +2,61 @@ let bcrypt = require('bcryptjs')
 let mongoose = require('mongoose')
 
 // Create user schema
+let tagsSchema = new mongoose.Schema({
+    steamId: {
+        type: String,
+        unique: true
+    },
+    originId: {
+        type: String,
+        unique: true
+    },
+    battleNetId: {
+        type: String,
+        unique: true
+    },
+    epicGamesId: {
+        type: String,
+        unique: true
+    },
+    xboxGamerTag: {
+        type: String,
+        unique: true
+    },
+    psnId: {
+        type: String,
+        unique: true
+    },
+    nintendoFriendCode: {
+        type: String,
+        unique: true
+    }
+})
+
+let creatorSchema = new mongoose.Schema({
+    youTube: {
+        type: String,
+        unique: true
+    },
+    twitch: {
+        type: String,
+        unique: true
+    },
+    mixer: {
+        type: String,
+        unique: true
+    },
+    twitter: {
+        type: String,
+        unique: true
+    },
+    instagram: {
+        type: String,
+        unique: true
+    }
+})
+
+
 let userSchema = new mongoose.Schema({
     firstname: {
         type: String,
@@ -17,13 +72,18 @@ let userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        minlength: 8
+        minlength: 6
     },
     pic: String,
+    backgroundPic: String,
+    bio: String,
     admin: {
         type: Boolean,
         default: false
-    }
+    },
+    games: Array,
+    tags: tagsSchema,
+    creator: creatorSchema
 })
 
 // Hash the passwords with BCrypt 
