@@ -54,7 +54,7 @@ router.post('/signup', (req, res) => {
       // Yay! Things worked and user exists now!
       // Create a token for the new user
       let token = jwt.sign(newUser.toJSON(), process.env.JWT_SECRET, {
-        expiresIn: 120 // 60 * 60 * 8 // 8 hours, in seconds
+        expiresIn: 60 * 60 * 8 // 8 hours, in seconds
       })
 
       res.send({ token })
@@ -65,7 +65,9 @@ router.post('/signup', (req, res) => {
         res.status(412).send({ message: `Validation Error ${err.message}` })
       }
       else {
+        console.log('Error', err)
         res.status(500).send({ message: 'Error creating user' })
+        
       }
     })
   })
