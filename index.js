@@ -5,12 +5,14 @@ let morgan = require('morgan')
 let rowdyLogger = require('rowdy-logger')
 let cors = require('cors')
 let expressJwt = require('express-jwt')
+let methodOverride = require('method-override')
 
 // Instantiate app
 let app = express()
 let rowdyResults = rowdyLogger.begin(app)
 
 // Set up middleware
+app.use(methodOverride('_method'))
 app.use(morgan('dev'))
 app.use(express.urlencoded({ extended: false })) // Accept form data
 app.use(express.json()) // Accept data from fetch (or any AJAX call)
