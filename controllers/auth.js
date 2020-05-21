@@ -36,6 +36,23 @@ router.post('/login', (req, res) => {
 
 })
 
+router.put('/games', (req, res) => {
+  console.log(req.body)
+  // Look up the user by their email
+  db.User.findOne({ email: req.body.email })
+  .then(user => {
+    console.log(req.body.gameId)
+   user.games.push(req.body.gameId)
+   user.save()
+  })
+  .catch(err => {
+    console.log(err)
+  })
+
+})
+
+
+
 // POST to /auth/signup (create user; generate token)
 router.post('/signup', (req, res) => {
   console.log(req.body)

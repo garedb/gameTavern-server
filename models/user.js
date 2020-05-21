@@ -58,6 +58,11 @@ let creatorSchema = new mongoose.Schema({
 
 
 let userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+        unique: true
+    },
     firstname: {
         type: String,
         required: true
@@ -75,7 +80,7 @@ let userSchema = new mongoose.Schema({
         minlength: 6
     },
     pic: String,
-    backgroundPic: String,
+    background: String,
     bio: String,
     admin: {
         type: Boolean,
@@ -101,6 +106,7 @@ userSchema.set('toJSON', {
     transform: (doc, user) => {
         delete user.password
         delete user.__v
+        delete user.games
         return user
     }
 })
